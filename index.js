@@ -18,6 +18,11 @@ $(()=> {
         $(this).css("font-size","3rem")
         console.log("clicked!")
     });
+    $("h2").css({
+                 color:"blueviolet",
+                 fontSize : "1.5rem",
+                 fontWeight : "bold"
+                })
    
     // $("li").each(function(i,el){
     //     if(i%2!==0){

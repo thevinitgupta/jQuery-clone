@@ -9,6 +9,14 @@ const makeChange = function(collection){
                 element.style[prop] = value;
             });
         }
+        else if (typeof cssArgs[0] === "object"){
+            let styles = cssArgs[0];
+            for(let prop in styles){
+                collection.forEach(element => {
+                    element.style[prop] = styles[prop];
+                })
+            }
+        }
     }
 
     //returns the inner html of all elements selected with the selector passed
