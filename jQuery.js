@@ -1,9 +1,23 @@
 //this function holds the different functionalities we need to add to the elements
 const makeChange = function(collection){
+
+    //.each function is used to iterate over all matching elements and apply functions
+    collection.each = function(callback){ //callback is the function passed in the .each method which contains the statements to be executed for each of the element
+        collection.forEach((element,i) => { //element and i are the callback args for .forEach() method for collection 
+
+            //here we are binding callback with each element thus the callback function takes one element at a time and executes the statements
+            const boundFunc = callback.bind(element);
+            boundFunc(i,element) //here were are passed the index and element for current iteration of forEach to be used in the callback function for .each
+        })
+    }
      //defining css function to change the styles
      collection.css = function(...cssArgs){
-         console.log(cssArgs)
         if(typeof cssArgs[0] === "string"){
+            //only css property is passed then 
+            if(cssArgs.length===1) {
+                //return the value of that property of the first instance of selector
+                return collection[0].style[cssArgs[0]];
+            }
             const [prop,value] = cssArgs;
             collection.forEach(element => {
                 element.style[prop] = value;
@@ -20,8 +34,17 @@ const makeChange = function(collection){
     }
 
     //returns the inner html of all elements selected with the selector passed
-    collection.html = function(){
-        let htmlText =collection[0].innerHTML;
+    collection.html = function(...htmlArgs){
+        let htmlText = "";
+
+        //no arguments passed so just return the current value
+        if(htmlArgs.length===0)
+            htmlText =collection[0].innerHTML;
+        //argument passed to set the innerhtml value and then return the current value
+        else if(htmlArgs.length>0 && typeof htmlArgs[0] === "string"){
+            collection[0].innerHTML = htmlArgs[0]
+            htmlText =collection[0].innerHTML;
+        }
         return htmlText;
     }
     collection.append = function(appendArg){
@@ -30,8 +53,17 @@ const makeChange = function(collection){
     collection.prepend = function(prependArg){
         collection[0].innerHTML = prependArg+collection[0].innerHTML;
     }
-    collection.val = function() {
-        return collection[0].value;
+    collection.val = function(...valArg) {
+        let valText = "";
+
+        //no arguments passed so just return the current value
+        if(valArg.length===0)
+            valText =collection[0].value;        //argument passed to set the  value and then return the current value
+        else if(valArg.length>0 && typeof valArg[0] === "string"){
+            collection[0].value = valArg[0]
+            valText =collection[0].value;
+        }
+        return valText;
     }
     collection.text = function(){
         let textVal ="";
@@ -55,13 +87,29 @@ const makeChange = function(collection){
         
         return textVal;
     }
+    
+    collection.toggle = function(){
+            collection.forEach(element => {
+                if(element.style.display!=="none"){
+                element.style.display = "none";
+                } 
+                else {
+                    element.style.display = "initial"; 
+                }
+            })
+    }
 
     //used to add event listener to all the instances of the element
-   collection.on = function(...onArgs){
-    collection.forEach(col => {
-        col.addEventListener(onArgs[0],onArgs[1])
-    })
- }
+    collection.on = function(...onArgs){
+        collection.forEach(col => {
+            col.addEventListener(onArgs[0],onArgs[1])
+        })
+    }
+    collection.off = function(...offArgs){
+        collection.forEach(col => {
+            col.removeEventListener(offArgs[0],offArgs[1])
+        })
+    }
    return collection;
 }
 

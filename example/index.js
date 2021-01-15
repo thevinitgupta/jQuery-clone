@@ -13,7 +13,7 @@ $(()=> {
     console.log($("input").val());
 
     console.log($("ul").text());
-
+    
     $("h1").on("click",function(){
         $(this).css("font-size","3rem")
         console.log("clicked!")
@@ -29,4 +29,5 @@ $(()=> {
             })
         }
     })
+    console.log($("li").css("color"))
 })
